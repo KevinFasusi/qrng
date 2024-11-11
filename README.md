@@ -15,7 +15,7 @@ This repository is home to the firmware and hardware designs for a quantum rando
 The project components include a repository for a [command line interface (CLI)](https://github.com/KevinFasusi/qrng-cli), 
 [graphical user interface (GUI)](https://github.com/KevinFasusi/qrng-gui) and [stochastic tests and analysis](https://github.com/KevinFasusi/qrng-notebooks) of the output. 
 
-The QRNG is part of a project to explore random numbers, cryptography and simulation. 
+The QRNG is part of a project to explore and experiment with random numbers, cryptography and simulation. 
 
 The repository hosts:
 
@@ -72,13 +72,13 @@ overview. I do not provide an indepth coverage of photonics, linear optics or qu
 For a more detailed treatment please refer to the resources section of the 
 [wiki](https://www.github.com/KevinFasusi/qrng/wiki/Resources).
 
-For a classical system (the pcs, laptops and servers etc.), bits can be represented by 
-two states either a $0$ or $1$. A classical computer uses sequences of zeroes and ones to 
-operate. Dirac notation is used extensively in quantum computing and looks intimidating. For an introduction amenable to
+Dirac notation is used extensively in quantum computing and looks intimidating. For an introduction amenable to
 someone with some knowledge of computer science, and not requiring a physics degree, read 
 'Quantum Computer Science: An Introduction' ([reading list](https://www.github.com/KevinFasusi/qrng/wiki/Resources)).
 
-The analogue of a bit in classical computing is the qubit in quantum computing and refers to the computation basis state 
+For a classical system (the pcs, laptops and servers etc.), bits can be represented by
+two states either a $0$ or $1$. A classical computer uses sequences of zeroes and ones to
+operate. The analogue of a bit in classical computing is the qubit in quantum computing and refers to the computation basis state 
 represented in two-dimensional hilbert space $\mathcal{H}$:
 $$\vert0\rangle=\begin{bmatrix} 1\\ 0 \end{bmatrix} \text{, }\vert1\rangle=\begin{bmatrix} 0\\ 1 \end{bmatrix}$$
 
@@ -88,14 +88,13 @@ $\psi=\alpha\vert 0\rangle +\beta\vert 1\rangle$.
 The QRNG presented here uses a laser diode gantry as the qubit generator. Each laser is a single photon source. The photon
 provides the probabilistic amplitudes corresponding to two paths.
 
-Using the laser as a photon source, the system is prepared in a superposition of horizontal ($H$) and vertical ($V$)
+Using the laser as a photon source, the system is prepared in a superposition with horizontal ($H$) and vertical ($V$)
 polarisation $(\vert H\rangle + \vert V\rangle)/\sqrt{2}$. 
 
 ![polarised-light-encoded.png](assets/encoding-photon.jpeg)
 
 A 50:50 polarised beam splitter (PBS) is used to encode the photon as a $0$ or $1$ depending on the path the photon 
-takes. The PBS will decompose the incident light sending linear light through the horizontal (0) or vertical
-output (1).  The measurement section uses a single photon detector (SPD) along each axis of photo resistors 
+takes. The measurement section uses a single photon detector (SPD) along each axis of photo resistors 
 (new model replaces with photo transistors) two for each qubit "wire" for horizontal and vertical encoding. 
 The measurement section is responsible for the decoherence of the quantum system.
 
@@ -103,8 +102,8 @@ The measurement section is responsible for the decoherence of the quantum system
 
 ## 🛠️  Fabrication, installation and assembly instructions
 
-The QRNG uses the Arduino IoT 33. Other boards will be supported, however, due to the number of analogue pins required 
-a multiplexer will be necessary. n
+The QRNG uses the 'Arduino IoT 33'. Other boards will be supported, however, due to the number of analogue pins required 
+a multiplexer will be necessary.
 
 The full build will be available in the [wiki](https://github.com/KevinFasusi/qrng/wiki/Build).
 The build instructions will include the electronics, enclosure and assembly.
