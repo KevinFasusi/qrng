@@ -76,10 +76,10 @@ Dirac notation is used extensively in quantum computing and looks intimidating. 
 someone with some knowledge of computer science, and not requiring a physics degree, read 
 'Quantum Computer Science: An Introduction' ([reading list](https://www.github.com/KevinFasusi/qrng/wiki/Resources)).
 
-For a classical system (the pcs, laptops and servers etc.), bits can be represented by
+For a classical system (the pcs, laptops and servers etc.), bits are represented by
 two states either a $0$ or $1$. A classical computer uses sequences of zeroes and ones to
-operate. The analogue of a bit in classical computing is the qubit in quantum computing and refers to the computation basis state 
-represented in two-dimensional hilbert space $\mathcal{H}$:
+operate. The analogue of a bit in classical computing in quantum computing is the qubit and refers to the computation 
+basis state represented in two-dimensional hilbert space $\mathcal{H}$:
 $$\vert0\rangle=\begin{bmatrix} 1\\ 0 \end{bmatrix} \text{, }\vert1\rangle=\begin{bmatrix} 0\\ 1 \end{bmatrix}$$
 
 A qubit is in a superposition with $\alpha$ and $\beta$ representing varying probabilities such that
@@ -95,7 +95,7 @@ polarisation $(\vert H\rangle + \vert V\rangle)/\sqrt{2}$.
 
 A 50:50 polarised beam splitter (PBS) is used to encode the photon as a $0$ or $1$ depending on the path the photon 
 takes. The measurement section uses a single photon detector (SPD) along each axis of photo resistors 
-(new model replaces with photo transistors) two for each qubit "wire" for horizontal and vertical encoding. 
+(new model replaces with photodiodes) two for each qubit "wire" for horizontal and vertical encoding. 
 The measurement section is responsible for the decoherence of the quantum system.
 
 ![qrng-base-v10-annotated.jpeg](assets/qrng-base-v10-annotated.jpeg)
@@ -235,19 +235,22 @@ Total: 40696  0: 34173 1: 6523 0/1: 0.8397139768/0.1602860232
 
 ### Graphical user interface
 
-The QRNG can be monitored and used via a cross-platform (Windows, Linux. and MacOs) graphical user interface.
+The QRNG can be monitored and used via a cross-platform (Windows, Linux. and MacOs) 
+[graphical user interface](https://github.com/KevinFasusi/qrng-gui).
 
-![gui-home.jpeg](assets/gui-home.jpeg)
+![gui view](assets/gui-view.jpeg)
 
 ## 🫤 Known issues / limitations
 
-- The current setup has not passed a cursory dieharder test for randomness. The test was conducted with insufficient 
-data and parsed a file as input instead of the preferred method, piping the generators output directly to a running 
-instance of the dieharder utility. More details can be found
+- This method is not fast by any stretch of the imagination. Using the MCU, we are generating random bits at 
+significantly less than 1Mbps. To "go faster", we would need to use detectors connected to an ADC directly feeding the FPGA.
+- The current setup has not passed a [dieharder](https://webhome.phy.duke.edu/~rgb/General/dieharder.php) test for
+randomness. The test was conducted with insufficient data and parsed a file as input instead of the preferred method, 
+piping the generators output directly to a running instance of the dieharder utility. More details can be found
   on the [wiki](https://github.com/KevinFasusi/qrng/wiki/Random).
-- The v1.0 enclosure was designed to mount photo resistors not transistors. The project code is implemented for 
-photo transistors. Photo transistors were also used in the [solderless breadboard setup](https://github.com/KevinFasusi/qrng/wiki/Build). 
-The v2.0 enclosure will be changed to house photo transistors.
+- The v1.0 enclosure was designed to mount photo resistors not diode. The project code is implemented for 
+photodiode. Photodiodes were also used in the [solderless breadboard setup](https://github.com/KevinFasusi/qrng/wiki/Build). 
+The v2.0 enclosure will be changed to house photodiode.
 - Printing the enclosure using PLA leads to less than perfect alignment of the laser gantry (qubit source) and the 
 measurement section (PBS and SPDs) due to possible warping and printer tolerances. Your mileage may vary, depending on the
 quality of your 3d printer and printer environment. When placing the emitter caps on each laser, in some instances 
