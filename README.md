@@ -102,10 +102,7 @@ The measurement section is responsible for the decoherence of the quantum system
 
 ## 🛠️  Fabrication, installation and assembly instructions
 
-The QRNG uses the 'Arduino IoT 33'. Other boards will be supported, however, due to the number of analogue pins required 
-a multiplexer will be necessary.
-
-The full build will be available in the [wiki](https://github.com/KevinFasusi/qrng/wiki/Build).
+The QRNG uses the 'Arduino IoT 33'. The full build will be available in the [wiki](https://github.com/KevinFasusi/qrng/wiki/Build).
 The build instructions will include the electronics, enclosure and assembly.
 
 A wiring diagram for the arduino IoT 33 can be seen below:
