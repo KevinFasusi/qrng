@@ -24,7 +24,7 @@ module qubit_counter (
   // The count for basis state |0> representing the orthonormal state 0 in
   // classical computing
   always @( posedge rst0 or posedge clk0) begin
-    if (rst == 1'b1) begin
+    if (rst0 == 1'b1) begin
       led <= 4'b0;
     end else begin
       led <= led - 1'b1;
@@ -34,7 +34,7 @@ module qubit_counter (
   // The count for basis state |1> representing the orthonormal state 1 in
   // classical computing
   always @( posedge rst1 or posedge clk1) begin
-     if (rst == 1'b1) begin
+     if (rst1 == 1'b1) begin
        led <= 4'b0;
      end else begin
        led <= led + 1'b1;
