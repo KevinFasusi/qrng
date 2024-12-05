@@ -19,10 +19,12 @@ const (
 	SPD2
 	SPD3
 	SPD4
+	W0
+	W1
 )
 
 func (i IDS) Strings() string {
-	return [...]string{"Q1", "Q2", "Q3", "Q4", "SPD1", "SPD2", "SPD3", "SPD4"}[i]
+	return [...]string{"Q1", "Q2", "Q3", "Q4", "SPD1", "SPD2", "SPD3", "SPD4", "W0", "W1"}[i]
 }
 
 // Circuit runs the assembled logic using the available qubit generators and single photon detectors.
@@ -33,14 +35,16 @@ type Circuit struct {
 	Generators *[]Generator
 	Detectors  *[]Detector
 	Bias       *Bias
+	Wires      *[]Generator
 }
 
 // NewCircuit composes new circuit using Generator and Detector slices and a Bias struct.
-func NewCircuit(generatorQueue *[]Generator, singlePhotonDetectorQueue *[]Detector, bias *Bias) *Circuit {
+func NewCircuit(generatorQueue *[]Generator, singlePhotonDetectorQueue *[]Detector, bias *Bias, fpgaWires *[]Generator) *Circuit {
 	return &Circuit{
 		Generators: generatorQueue,
 		Detectors:  singlePhotonDetectorQueue,
 		Bias:       bias,
+		Wires:      fpgaWires,
 	}
 }
 
@@ -48,8 +52,9 @@ func NewCircuit(generatorQueue *[]Generator, singlePhotonDetectorQueue *[]Detect
 func (c *Circuit) Run() {
 	littleEndianByte := make([]byte, 4)
 	for _, g := range *c.Generators {
-		c.PulseGenerator(g)
+		c.PulseGenerator(g, 200)
 		measurement := c.Measure(c.Detectors, g.GetID())
+		c.PingFPGA(measurement)
 		if c.Bias.Postprocessor(measurement, g.GetID()) {
 			binary.LittleEndian.PutUint32(littleEndianByte, uint32(measurement))
 			go println(hex.EncodeToString(littleEndianByte))
@@ -62,11 +67,11 @@ func (c *Circuit) Run() {
 
 // PulseGenerator pulses the qubit generator source by setting the digital pin LOW then HIGH at 200 microsecond
 // intervals.
-func (c *Circuit) PulseGenerator(generator Generator) {
+func (c *Circuit) PulseGenerator(generator Generator, duration time.Duration) {
 	generator.SetLow()
-	time.Sleep(200 * time.Microsecond)
+	time.Sleep(duration * time.Microsecond)
 	generator.SetHigh()
-	time.Sleep(200 * time.Microsecond)
+	time.Sleep(duration * time.Microsecond)
 }
 
 // Measure makes a measurement with the single photon detectors connected to the analogue output for the
@@ -95,6 +100,24 @@ func (c *Circuit) Measure(detector *[]Detector, qubitID string) int {
 	return 0
 }
 
+// PingFPGA pulses the fpga wire to signal the measurement value.
+func (c *Circuit) PingFPGA(measurement int) {
+	switch measurement {
+	case 0:
+		for _, w := range *c.Wires {
+			if w.GetID() == W0.Strings() {
+				c.PulseGenerator(w, 200)
+			}
+		}
+	case 1:
+		for _, w := range *c.Wires {
+			if w.GetID() == W1.Strings() {
+				c.PulseGenerator(w, 200)
+			}
+		}
+	}
+}
+
 // Detect takes a reading from the single photon detector and encodes the result based on the superpositions for which
 // the system was prepared.
 func (c *Circuit) Detect(detector Detector, qubitID string) int {
@@ -103,18 +126,18 @@ func (c *Circuit) Detect(detector Detector, qubitID string) int {
 	detectorID := detector.GetID()
 	fmt.Printf("%s -> %s VERTICAL   |1>: %d \n", qubitID, detectorID, verticalValue)
 	fmt.Printf("%s -> %s HORIZONTAL |0>: %d \n", qubitID, detectorID, horizontalValue)
-	decodedMeasurement := c.Encode(horizontalValue, verticalValue)
+	decodedMeasurement := c.Encode(horizontalValue, verticalValue, c.Wires)
 	return decodedMeasurement
 }
 
 // Encode converts the detected values for the
-func (c *Circuit) Encode(horizontalLight, verticalLight uint16) int {
+func (c *Circuit) Encode(horizontalLight, verticalLight uint16, wire *[]Generator) int {
 	if horizontalLight > verticalLight {
 		return 0
 	} else if verticalLight >= horizontalLight {
 		return 1
 	} else {
-		return c.Encode(horizontalLight, verticalLight)
+		return c.Encode(horizontalLight, verticalLight, c.Wires)
 	}
 }
 

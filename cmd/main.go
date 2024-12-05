@@ -38,7 +38,15 @@ func main() {
 		quantum.Q3.Strings(),
 		quantum.Q4.Strings()})
 
-	qc := quantum.NewCircuit(&generatorQueue, &singlePhotonDetectorQueue, bias)
+	w0 := quantum.NewFpgaWire(machine.D6, quantum.W0.Strings())
+	w1 := quantum.NewFpgaWire(machine.D7, quantum.W1.Strings())
+
+	var fpgaWires []quantum.Generator
+
+	fpgaWires = append(fpgaWires, w0)
+	fpgaWires = append(fpgaWires, w1)
+
+	qc := quantum.NewCircuit(&generatorQueue, &singlePhotonDetectorQueue, bias, &fpgaWires)
 
 	for {
 		qc.Run()
