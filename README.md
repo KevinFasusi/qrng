@@ -80,8 +80,11 @@ For a classical system (the pcs, laptops and servers etc.), bits are represented
 two states either a $0$ or $1$. A classical computer uses sequences of zeroes and ones to
 operate. The analogue of a bit in classical computing in quantum computing is the qubit and refers to the computation 
 basis state represented in two-dimensional hilbert space $\mathcal{H}$:
+
+```math
 $$\vert0\rangle=\begin{bmatrix} 1\\ 0 \end{bmatrix} \text{, }\vert1\rangle=\begin{bmatrix} 0\\ 1 \end{bmatrix}$$
 
+```
 A qubit is in a superposition with $\alpha$ and $\beta$ representing varying probabilities such that
 $\psi=\alpha\vert 0\rangle +\beta\vert 1\rangle$. 
 
