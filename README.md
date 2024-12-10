@@ -137,7 +137,7 @@ Replace `<the usb device>` with the correct device on your system e,g. `ttyUSB0`
 A field programmable gate array (FPGA) is used to offload some of the processing including:
 
 - frequency counts and distribution
-- Von-Neuman skew correction
+- Von Neumann skew correction
 
 The FPGA used in this project is the iCEStick. Any FPGA supported by [apio](https://github.com/FPGAwars/apio) (a python 
 project) will work, with the relevant changes to the `.ini` file and component assignment file `.pcf`.
